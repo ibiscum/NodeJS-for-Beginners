@@ -3,6 +3,13 @@ import bodyParser from 'body-parser'
 import * as whisper from './stores/whisper.js'
 import * as user from './stores/user.js'
 import { generateToken, requireAuthentication } from './utils.js'
+import rateLimit from 'express-rate-limit'
+
+const aboutLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+ max: 20, // limit each IP to 20 requests per minute to '/about'
+ message: 'Too many requests from this IP, please try again later.'
+})
 
 const app = express()
 app.use(express.static('public'))
@@ -42,7 +49,7 @@ app.post('/signup', async (req, res) => {
   }
 })
 
-app.get('/about', async (req, res) => {
+app.get('/about', aboutLimiter, async (req, res) => {
   const whispers = await whisper.getAll()
   res.render('about', { whispers })
 })

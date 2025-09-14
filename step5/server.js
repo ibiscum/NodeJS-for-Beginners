@@ -5,8 +5,7 @@ import * as whisper from './stores/whisper.js'
 import * as user from './stores/user.js'
 import { generateToken, requireAuthentication } from './utils.js'
 
-// Import express-rate-limit for rate limiting sensitive endpoints
-import rateLimit from 'express-rate-limit'
+
 
 const app = express()
 // Define a rate limiter for DELETE requests (e.g., max 10 per 15 minutes)
@@ -15,6 +14,13 @@ const deleteLimiter = rateLimit({
   max: 10, // limit each IP to 10 delete requests per windowMs
   message: 'Too many delete requests from this IP, please try again later'
 })
+// Define a rate limiter for PUT requests (e.g., max 10 per 15 minutes)
+const putLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 put requests per windowMs
+  message: 'Too many update requests from this IP, please try again later'
+})
+
 
 // Define a rate limiter for POST requests (e.g., max 100 per 15 minutes)
 const postLimiter = rateLimit({
@@ -97,7 +103,7 @@ app.post('/api/v1/whisper', postLimiter, requireAuthentication, async (req, res)
   res.status(201).json(newWhisper)
 })
 
-app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.put('/api/v1/whisper/:id', putLimiter, requireAuthentication, async (req, res) => {
   const { message } = req.body
   const id = req.params.id
   if (typeof message !== 'string' || !message) {

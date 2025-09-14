@@ -9,7 +9,12 @@ const create = async (message) => {
   await whisper.save()
   return whisper
 }
-const updateById = async (id, message) => Whisper.findOneAndUpdate({ _id: id }, { message }, { new: false })
+const updateById = async (id, message) => {
+  if (typeof message !== 'string') {
+    throw new Error('Message must be a string');
+  }
+  return Whisper.findOneAndUpdate({ _id: id }, { message }, { new: false });
+}
 const deleteById = async (id) => Whisper.deleteOne({ _id: id })
 
 export { getAll, getById, create, updateById, deleteById }

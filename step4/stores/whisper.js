@@ -9,7 +9,7 @@ const create = async (message, authorId) => {
   await whisper.save()
   return whisper
 }
-const updateById = async (id, message) => Whisper.findOneAndUpdate({ _id: id }, { message }, { new: false })
+const updateById = async (id, message) => Whisper.findOneAndUpdate({ _id: id }, { $set: { message } }, { new: false })
 const deleteById = async (id) => Whisper.deleteOne({ _id: id })
 
 export { getAll, getById, create, updateById, deleteById }

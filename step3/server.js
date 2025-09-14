@@ -16,7 +16,7 @@ const apiLimiter = rateLimit({
 
 // Apply rate limiter to all /api/v1/whisper routes
 app.use('/api/v1/whisper', apiLimiter)
-app.get('/about', async (req, res) => {
+app.get('/about', apiLimiter, async (req, res) => {
   const whispers = await getAll()
   res.render('about', { whispers })
 })

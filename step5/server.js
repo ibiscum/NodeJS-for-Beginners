@@ -16,6 +16,14 @@ const deleteLimiter = rateLimit({
   message: 'Too many delete requests from this IP, please try again later'
 })
 
+// Define a rate limiter for POST requests (e.g., max 100 per 15 minutes)
+const postLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 POST requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+
 // Define a rate limiter for GET whisper by ID requests (e.g., max 100 per 15 minutes)
 const getWhisperLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -79,7 +87,7 @@ app.get('/api/v1/whisper/:id', getWhisperLimiter, requireAuthentication, async (
   }
 })
 
-app.post('/api/v1/whisper', requireAuthentication, async (req, res) => {
+app.post('/api/v1/whisper', postLimiter, requireAuthentication, async (req, res) => {
   const { message } = req.body
   if (!message) {
     res.sendStatus(400)

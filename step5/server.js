@@ -23,6 +23,14 @@ const postLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 })
+
+// Define a rate limiter for GET whisper by ID requests (e.g., max 100 per 15 minutes)
+const getWhisperLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 get requests per windowMs
+  message: 'Too many whisper requests from this IP, please try again later'
+});
+
 app.use(express.static('public'))
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
@@ -69,7 +77,7 @@ app.get('/api/v1/whisper', requireAuthentication, async (req, res) => {
   res.json(whispers)
 })
 
-app.get('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.get('/api/v1/whisper/:id', getWhisperLimiter, requireAuthentication, async (req, res) => {
   const id = req.params.id
   const storedWhisper = await whisper.getById(id)
   if (!storedWhisper) {

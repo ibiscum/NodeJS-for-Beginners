@@ -11,6 +11,13 @@ const aboutLimiter = rateLimit({
  message: 'Too many requests from this IP, please try again later.'
 })
 
+// Rate limiter for /api/v1/whisper GET route
+const apiWhisperLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests, please try again later.'
+})
+
 const app = express()
 app.use(express.static('public'))
 app.use(bodyParser.json())
@@ -54,7 +61,7 @@ app.get('/about', aboutLimiter, async (req, res) => {
   res.render('about', { whispers })
 })
 
-app.get('/api/v1/whisper', requireAuthentication, async (req, res) => {
+app.get('/api/v1/whisper', requireAuthentication, apiWhisperLimiter, async (req, res) => {
   const whispers = await whisper.getAll()
   res.json(whispers)
 })

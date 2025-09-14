@@ -72,7 +72,7 @@ app.get('/about', async (req, res) => {
   res.render('about', { whispers })
 })
 
-app.get('/api/v1/whisper', requireAuthentication, async (req, res) => {
+app.get('/api/v1/whisper', getWhisperLimiter, requireAuthentication, async (req, res) => {
   const whispers = await whisper.getAll()
   res.json(whispers)
 })

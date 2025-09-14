@@ -11,6 +11,13 @@ const aboutLimiter = rateLimit({
  message: 'Too many requests from this IP, please try again later.'
 })
 
+// API rate limiter: limit each IP to 100 requests per 15 minutes
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per window
+  message: 'Too many requests to whisper endpoints from this IP, please try again later.'
+})
+
 // Limit "dangerous" API calls (such as deletes) to 10 per minute per IP
 const apiLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
@@ -66,7 +73,7 @@ app.get('/api/v1/whisper', requireAuthentication, async (req, res) => {
   res.json(whispers)
 })
 
-app.get('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.get('/api/v1/whisper/:id', requireAuthentication, apiLimiter, async (req, res) => {
   const id = req.params.id
   const storedWhisper = await whisper.getById(id)
   if (!storedWhisper) {
@@ -76,7 +83,7 @@ app.get('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   }
 })
 
-app.post('/api/v1/whisper', requireAuthentication, async (req, res) => {
+app.post('/api/v1/whisper', requireAuthentication, apiLimiter, async (req, res) => {
   const { message } = req.body
   if (!message) {
     res.sendStatus(400)
@@ -86,7 +93,7 @@ app.post('/api/v1/whisper', requireAuthentication, async (req, res) => {
   res.status(201).json(newWhisper)
 })
 
-app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.put('/api/v1/whisper/:id', requireAuthentication, apiLimiter, async (req, res) => {
   const { message } = req.body
   const id = req.params.id
   if (!message) {

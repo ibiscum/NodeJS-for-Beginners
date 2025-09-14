@@ -87,7 +87,7 @@ app.post('/api/v1/whisper', requireAuthentication, async (req, res) => {
 app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   const { message } = req.body
   const id = req.params.id
-  if (!message) {
+  if (typeof message !== 'string' || !message) {
     res.sendStatus(400)
     return
   }

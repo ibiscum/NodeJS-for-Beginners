@@ -54,7 +54,7 @@ app.post('/signup', async (req, res) => {
   }
 })
 
-app.get('/about', async (req, res) => {
+app.get('/about', apiLimiter, async (req, res) => {
   const whispers = await whisper.getAll()
   res.render('about', { whispers })
 })

@@ -1,8 +1,16 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import * as whisper from './stores/whisper.js'
+import rateLimit from 'express-rate-limit'
 import * as user from './stores/user.js'
 import { generateToken, requireAuthentication } from './utils.js'
+
+
+// Set up rate limiter for sensitive endpoints
+const whisperLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+})
 
 const app = express()
 app.use(express.static('public'))
@@ -62,7 +70,7 @@ app.get('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   }
 })
 
-app.post('/api/v1/whisper', requireAuthentication, async (req, res) => {
+app.post('/api/v1/whisper', requireAuthentication, whisperLimiter, async (req, res) => {
   const { message } = req.body
   if (!message) {
     res.sendStatus(400)

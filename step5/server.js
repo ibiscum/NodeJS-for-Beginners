@@ -5,7 +5,17 @@ import * as whisper from './stores/whisper.js'
 import * as user from './stores/user.js'
 import { generateToken, requireAuthentication } from './utils.js'
 
+// Import express-rate-limit for rate limiting sensitive endpoints
+import rateLimit from 'express-rate-limit'
+
 const app = express()
+// Define a rate limiter for DELETE requests (e.g., max 10 per 15 minutes)
+const deleteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 delete requests per windowMs
+  message: 'Too many delete requests from this IP, please try again later'
+})
+
 app.use(express.static('public'))
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
@@ -93,7 +103,7 @@ app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   res.sendStatus(200)
 })
 
-app.delete('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.delete('/api/v1/whisper/:id', deleteLimiter, requireAuthentication, async (req, res) => {
   const id = req.params.id
   const storedWhisper = await whisper.getById(id)
   if (!storedWhisper) {

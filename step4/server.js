@@ -11,6 +11,13 @@ const aboutLimiter = rateLimit({
  message: 'Too many requests from this IP, please try again later.'
 })
 
+// Limit "dangerous" API calls (such as deletes) to 10 per minute per IP
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 10, // limit each IP to 10 requests per minute
+  message: 'Too many delete requests from this IP, please try again later.'
+})
+
 const app = express()
 app.use(express.static('public'))
 app.use(bodyParser.json())
@@ -100,7 +107,7 @@ app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   res.sendStatus(200)
 })
 
-app.delete('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.delete('/api/v1/whisper/:id', requireAuthentication, apiLimiter, async (req, res) => {
   const id = req.params.id
   const storedWhisper = await whisper.getById(id)
   if (!storedWhisper) {

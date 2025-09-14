@@ -11,6 +11,13 @@ const aboutLimiter = rateLimit({
  message: 'Too many requests from this IP, please try again later.'
 })
 
+// Define an API rate limiter for whisper endpoints
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 30, // limit each IP to 30 requests per minute for API
+  message: 'Too many requests from this IP, please try again later.'
+})
+
 const app = express()
 app.use(express.static('public'))
 app.use(bodyParser.json())
@@ -54,12 +61,12 @@ app.get('/about', aboutLimiter, async (req, res) => {
   res.render('about', { whispers })
 })
 
-app.get('/api/v1/whisper', requireAuthentication, async (req, res) => {
+app.get('/api/v1/whisper', apiLimiter, requireAuthentication, async (req, res) => {
   const whispers = await whisper.getAll()
   res.json(whispers)
 })
 
-app.get('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.get('/api/v1/whisper/:id', apiLimiter, requireAuthentication, async (req, res) => {
   const id = req.params.id
   const storedWhisper = await whisper.getById(id)
   if (!storedWhisper) {
@@ -69,7 +76,7 @@ app.get('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   }
 })
 
-app.post('/api/v1/whisper', requireAuthentication, async (req, res) => {
+app.post('/api/v1/whisper', apiLimiter, requireAuthentication, async (req, res) => {
   const { message } = req.body
   if (!message) {
     res.sendStatus(400)
@@ -79,7 +86,7 @@ app.post('/api/v1/whisper', requireAuthentication, async (req, res) => {
   res.status(201).json(newWhisper)
 })
 
-app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.put('/api/v1/whisper/:id', apiLimiter, requireAuthentication, async (req, res) => {
   const { message } = req.body
   const id = req.params.id
   if (!message) {
@@ -100,7 +107,7 @@ app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   res.sendStatus(200)
 })
 
-app.delete('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.delete('/api/v1/whisper/:id', apiLimiter, requireAuthentication, async (req, res) => {
   const id = req.params.id
   const storedWhisper = await whisper.getById(id)
   if (!storedWhisper) {

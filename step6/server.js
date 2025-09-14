@@ -3,12 +3,24 @@ import bodyParser from 'body-parser'
 import * as whisper from './stores/whisper.js'
 import * as user from './stores/user.js'
 import { generateToken, requireAuthentication } from './utils.js'
+import rateLimit from 'express-rate-limit'
 
 const app = express()
+
+// Rate limiter: adjust windowMs and max as appropriate for your use case
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per 'window' (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the RateLimit-* headers
+  legacyHeaders: false, // Disable the X-RateLimit-* headers
+})
+
 app.use(express.static('public'))
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
 
+// Apply rate limiter to all /api/ routes (can narrow if desired)
+app.use('/api/', apiLimiter)
 app.get('/login', (req, res) => {
   res.render('login')
 })

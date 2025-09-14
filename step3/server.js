@@ -1,12 +1,21 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { getAll, getById, create, updateById, deleteById } from './store.js'
+import rateLimit from 'express-rate-limit'
 
 const app = express()
 app.use(express.static('public'))
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
 
+// Set up rate limiter for API routes to help prevent abuse
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // Limit each IP to 100 requests per windowMs
+});
+
+// Apply rate limiter to all /api/v1/whisper routes
+app.use('/api/v1/whisper', apiLimiter)
 app.get('/about', async (req, res) => {
   const whispers = await getAll()
   res.render('about', { whispers })

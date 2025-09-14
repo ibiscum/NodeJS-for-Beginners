@@ -80,7 +80,7 @@ app.post('/api/v1/whisper', requireAuthentication, whisperLimiter, async (req, r
   res.status(201).json(newWhisper)
 })
 
-app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.put('/api/v1/whisper/:id', requireAuthentication, whisperLimiter, async (req, res) => {
   const { message } = req.body
   const id = req.params.id
   if (!message) {
@@ -101,7 +101,7 @@ app.put('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
   res.sendStatus(200)
 })
 
-app.delete('/api/v1/whisper/:id', requireAuthentication, async (req, res) => {
+app.delete('/api/v1/whisper/:id', requireAuthentication, whisperLimiter, async (req, res) => {
   const id = req.params.id
   const storedWhisper = await whisper.getById(id)
   if (!storedWhisper) {

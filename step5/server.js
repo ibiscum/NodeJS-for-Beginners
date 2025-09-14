@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import rateLimit from 'express-rate-limit'
 import * as whisper from './stores/whisper.js'
 import * as user from './stores/user.js'
 import { generateToken, requireAuthentication } from './utils.js'
@@ -8,7 +9,6 @@ const app = express()
 app.use(express.static('public'))
 app.use(bodyParser.json())
 app.set('view engine', 'ejs')
-
 app.get('/login', (req, res) => {
   res.render('login')
 })

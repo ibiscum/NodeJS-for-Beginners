@@ -9,7 +9,7 @@ const create = async (username, password, email) => {
 }
 
 const getUserByCredentials = async (username, password) => {
-  const user = await User.findOne({ username })
+  const user = await User.findOne({ username: { $eq: username } })
   if (!user) {
     throw new Error('User not found')
   }

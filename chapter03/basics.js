@@ -216,8 +216,94 @@ console.log(`Hello ${firstName}!`) // Hello John!
 const array = [1, 2, 3];
 console.log(Array.isArray(array)); // true
 
-const object = { name: "Ulisses" };
+const object = { name: "Ulises" };
 console.log(Array.isArray(object)); // false
 console.log(typeof array); // object
 console.log(typeof object); // object
 console.log("are object and array the same type?", typeof(array) === typeof(object)); // true
+
+const array1 = [1, 2, 3];
+const array2 = [1, 2, 3];
+console.log(array1 === array2); // false
+
+const emptyArray = [];
+let numbers = [1, 2, 3];
+const strings = ["Hello", "World"];
+const mixed = [1, "Hello", true];
+
+const arrayOne = Array.of( 1, 2, 3 );
+console.log(arrayOne);
+
+console.log(Array.from('packt')); // ['p', 'a', 'c', 'k', 't']
+
+console.log([...[1, 2, 3]]); // [1, 2, 3]
+console.log([...'packt']); // ['p', 'a', 'c', 'k', 't']
+
+console.log([...[1, 2, 3]]); // [1, 2, 3]
+console.log([...'packt']); // ['p', 'a', 'c', 'k', 't']
+
+console.log(Array.from([1, 2, 3], x => x + x)); // [2, 4, 6]
+
+const fruits = ['banana', 'apple', 'orange'];
+console.log(fruits[0]); // banana
+console.log(fruits[1]); // apple
+console.log(fruits[2]); // orange
+
+fruits[0] = 'pear';
+console.log(fruits); // ['pear', 'apple', 'orange']
+
+// Iterating over an array
+numbers = [1, 2, 3, 4, 5]
+const mapTransformation = numbers.map(el => el * 10)
+const forEachTransformation = []
+numbers.forEach(el => {
+    forEachTransformation.push(el * 10)
+})
+console.log(mapTransformation) // 10,20,30,40,50
+console.log(forEachTransformation) // 10,20,30,40,50
+
+numbers = [1, 2, 3, 4, 5]
+const filteredNums = numbers.filter(el => el <= 3)
+console.log(filteredNums) // [1, 2, 3]
+
+const dataTwo = [1, [2, 3], [4, 5]];
+const flatData = dataTwo.flat();
+console.log(flatData); // [1, 2, 3, 4, 5]
+
+const people = ['Joe', 'Jane', 'John', 'Jack'];
+console.log(people.join()); // Joe,Jane,John,Jack
+console.log(people.join(' + ')); // Joe + Jane + John + Jack
+
+const structuredPeople = people.map(person => `<li>${person}</li>\n`);
+console.log(`
+    <ul>
+        ${structuredPeople.join('')}
+    </ul>
+`)
+
+// <ul>
+//     <li>Joe</li>
+//      ...
+// </ul>
+
+numbers = [7, 1,10, 3,15,20]
+console.log(numbers.sort())
+// [1, 10, 15, 20, 3, 7]
+console.log(numbers.sort((a, b) => a - b))
+// [1, 3, 7, 10, 15, 20]
+
+const list = [1, 2];
+const d = list[0] || 0; // 1
+const b = list[1] // 2
+const c = list[2] || 4; // 4
+
+const [ e = 0, f, g = 4 ] = list;
+
+let arr = [1,2,2,3,1,4,5,4,5]
+let set = new Set(arr)
+let uniques = Array.from(set)
+console.log(uniques) // [1,2,3,4,5]
+
+// Using objects in JavaScript
+
+const person = {}

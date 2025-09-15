@@ -1,5 +1,8 @@
 # Node.js for Beginners
 
+[![CodeQL Advanced](https://github.com/ibiscum/NodeJS-for-Beginners/actions/workflows/codeql.yml/badge.svg)](https://github.com/ibiscum/NodeJS-for-Beginners/actions/workflows/codeql.yml)
+[![Dependabot Updates](https://github.com/ibiscum/NodeJS-for-Beginners/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/ibiscum/NodeJS-for-Beginners/actions/workflows/dependabot/dependabot-updates)
+
 <a href="https://www.packtpub.com/product/nodejs-for-beginners/9781803245171"><img src="https://content.packt.com/B21678/cover_image_small.jpg" alt="" height="256px" align="right"></a>
 
 This is the code repository for [Node.js for Beginners](https://www.packtpub.com/product/nodejs-for-beginners/9781803245171), published by Packt.

@@ -144,3 +144,80 @@ if(condition) {
 } else {
     console.log("The condition and condition2 are false");
 }
+
+// const condition3 = true;
+// if(condition3) {
+//     return console.log("The condition is true");
+// }
+// console.log("The condition is false");
+
+// The switch statement
+const extension = ".md";
+switch (extension) {
+    case ".doc":
+        console.log("This extension .doc will be deprecated soon");
+    case ".pdf":
+    case ".md":
+    case ".svg":
+        console.log("Congratulations! You can open this file");
+        break;
+    default:
+        console.log(`${extension} is not supported`);
+}
+
+// Ternary operator
+const isMember = true;
+console.log(`The payment is ${isMember ? "20.00€" : "50.00€"}`); // The payment is 20.00€
+
+// Understanding loops
+
+// while
+let i = 1;
+while (i <= 10) {
+    console.log(i);
+    i++;
+};
+
+// do...while
+i = 0;
+do {
+    console.log(`i value: ${i}`);
+    i++;
+} while (false); // i value: 0
+
+// for
+for (let i = 0; i < 10; i++) {
+    console.log(i);
+}
+
+for (let i = 0, x = 1, z = 2, limit = 10; i <= limit; x *= z, i++ ) {
+    console.log(`i: ${i}. x: ${x}. z: ${z}`);
+}
+// i: 0. x: 1. z: 2
+// ...
+// i: 10. x: 1024. z: 2
+
+let x = 1;
+const z = 2, limit = 10;
+for (let i = 0; i <= limit; i++ ) {
+    console.log(`i: ${i}. x: ${x}. z: ${z}`);
+    x *= z
+}
+
+// Using strings in JavaScript
+console.log('Hello World');
+console.log("Hello World");
+console.log(`Hello World`);
+
+const firstName = "John";
+console.log(`Hello ${firstName}!`) // Hello John!
+
+// Exploring arrays
+const array = [1, 2, 3];
+console.log(Array.isArray(array)); // true
+
+const object = { name: "Ulisses" };
+console.log(Array.isArray(object)); // false
+console.log(typeof array); // object
+console.log(typeof object); // object
+console.log("are object and array the same type?", typeof(array) === typeof(object)); // true

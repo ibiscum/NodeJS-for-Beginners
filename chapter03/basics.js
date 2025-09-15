@@ -306,4 +306,56 @@ console.log(uniques) // [1,2,3,4,5]
 
 // Using objects in JavaScript
 
-const person = {}
+let person = {}
+
+person = {
+    name: 'Jane',
+}
+
+person = {
+    name: 'Jane',
+    id: 1,
+    favoriteColors: ['blue', 'green'],
+    address: {
+        street: 'Main St',
+        number: 1,
+    },
+    fullName: function() {
+        return `${this.name} Doe`
+    },
+    sayHi: function() {
+        console.log('Hello!')
+    }
+}
+console.log(person.fullName()) // Jane Doe
+person.sayHi() // Hello!
+console.log(person.address.street) // Main St
+console.log(person.id) // 1
+console.log(person.favoriteColors[0]) // blue
+
+person = {
+    id: 12
+}
+
+person.name = 'Jane'
+console.log(person.name) // Jane
+person.id = 1
+console.log(person.id) // 1
+
+person = {
+    id: 12
+}
+console.log(person['id']) // 12
+const specialKey = 'first name with spaces'
+person[specialKey] = 'Jane'
+console.log(person[specialKey]) // Jane
+
+person = {
+    id: 12,
+    name: 'Jane'
+}
+
+delete person.id
+person.name = undefined
+console.log(person.id) // undefined
+console.log(person.name) // undefined

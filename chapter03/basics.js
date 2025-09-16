@@ -88,8 +88,8 @@ console.log(`JavaScript was presented to the world ${formatter.format(diffInYear
 // Conditional statements
 
 // Equality operators
-console.log([1,2] === [1,2]); // false
-console.log({ name: 'John' } === { name: 'John' }); // false
+// console.log([1,2] === [1,2]); // false
+// console.log({ name: 'John' } === { name: 'John' }); // false
 console.log(NaN === NaN); // false
 
 console.log(1 == '1'); // true
